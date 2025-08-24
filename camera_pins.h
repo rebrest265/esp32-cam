@@ -1,3 +1,10 @@
+/*
+ * Orignial from espressif, part of arduino-esp32
+ * 
+ * https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer
+ * 
+ * Simplified and modified by rebrest265 https://github.com/rebrest265/esp32-cam/ for internal purposes and shared as simple way to run ESP32 cam
+ */
 
 #if defined(CAMERA_MODEL_WROVER_KIT)
 #define PWDN_GPIO_NUM    -1
@@ -119,7 +126,7 @@
 #define XCLK_GPIO_NUM      0
 #define SIOD_GPIO_NUM     26
 #define SIOC_GPIO_NUM     27
-
+#define LED_GPIO_NUM       4
 #define Y9_GPIO_NUM       35
 #define Y8_GPIO_NUM       34
 #define Y7_GPIO_NUM       39

@@ -11,6 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+/*
+ * Orignial from espressif, part of arduino-esp32
+ * 
+ * https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer
+ * 
+ * Simplified and modified by rebrest265 https://github.com/rebrest265/esp32-cam/ for internal purposes and shared as simple way to run ESP32 cam
+ */
+
+
 #include "esp_http_server.h"
 #include "esp_timer.h"
 #include "esp_camera.h"
@@ -33,6 +43,12 @@
 #define FACE_COLOR_YELLOW (FACE_COLOR_RED | FACE_COLOR_GREEN)
 #define FACE_COLOR_CYAN   (FACE_COLOR_BLUE | FACE_COLOR_GREEN)
 #define FACE_COLOR_PURPLE (FACE_COLOR_BLUE | FACE_COLOR_RED)
+
+
+static inline void enable_led(bool en) {
+  digitalWrite(4, en ? HIGH : LOW);   // GPIO 4 on AI-Thinker
+  log_i("LED %s", en ? "ON" : "OFF");
+}
 
 typedef struct {
         size_t size; //number of values used for filtering
@@ -215,17 +231,28 @@ static size_t jpg_encode_stream(void * arg, size_t index, const void* data, size
     return len;
 }
 
+
 static esp_err_t capture_handler(httpd_req_t *req){
     camera_fb_t * fb = NULL;
     esp_err_t res = ESP_OK;
     int64_t fr_start = esp_timer_get_time();
 
-    fb = esp_camera_fb_get();
+    #if defined(LED_GPIO_NUM)
+        enable_led(true);
+        vTaskDelay(150 / portTICK_PERIOD_MS);  // The LED needs to be turned on ~150ms before the call to esp_camera_fb_get()
+        fb = esp_camera_fb_get();              // or it won't be visible in the frame. A better way to do this is needed.
+        enable_led(false);
+    #else
+        fb = esp_camera_fb_get();
+    #endif
+
     if (!fb) {
         Serial.println("Camera capture failed");
         httpd_resp_send_500(req);
         return ESP_FAIL;
     }
+    
+
 
     httpd_resp_set_type(req, "image/jpeg");
     httpd_resp_set_hdr(req, "Content-Disposition", "inline; filename=capture.jpg");
@@ -518,6 +545,10 @@ static esp_err_t cmd_handler(httpd_req_t *req){
         }
     }
     else if(!strcmp(variable, "face_enroll")) is_enrolling = val;
+    // REPLACE your current 'led' branch with:
+    else if(!strcmp(variable, "led")) {
+    enable_led(val != 0);   // no macros, no res=-1 path
+    }
     else if(!strcmp(variable, "face_recognize")) {
         recognition_enabled = val;
         if(recognition_enabled){
@@ -578,14 +609,36 @@ static esp_err_t status_handler(httpd_req_t *req){
     return httpd_resp_send(req, json_response, strlen(json_response));
 }
 
+static const char * LED_PAGE = R"HTML(
+<!doctype html>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ESP32-CAM LED</title>
+<style>body{font-family:system-ui;margin:24px}button{padding:8px 14px;margin-right:8px}</style>
+<h2>Flash LED control (GPIO 4)</h2>
+<p>
+  <button id="on">ON</button>
+  <button id="off">OFF</button>
+</p>
+<script>
+  const set = v => fetch(`/control?var=led&val=${v}`).catch(console.error);
+  document.getElementById('on').onclick = ()=>set(1);
+  document.getElementById('off').onclick = ()=>set(0);
+</script>
+)HTML";
+
+static esp_err_t led_page_handler(httpd_req_t *req) {
+  httpd_resp_set_type(req, "text/html; charset=utf-8");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  return httpd_resp_send(req, LED_PAGE, HTTPD_RESP_USE_STRLEN);
+}
+
 static esp_err_t index_handler(httpd_req_t *req){
-    httpd_resp_set_type(req, "text/html");
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    sensor_t * s = esp_camera_sensor_get();
-    if (s->id.PID == OV3660_PID) {
-        return httpd_resp_send(req, (const char *)index_ov3660_html_gz, index_ov3660_html_gz_len);
-    }
-    return httpd_resp_send(req, (const char *)index_ov2640_html_gz, index_ov2640_html_gz_len);
+    httpd_resp_set_type(req, "text/html; charset=utf-8");
+    // IMPORTANT: do NOT set "Content-Encoding: gzip" when serving plain text
+
+    // Always serve the plain OV2640 page (your board is AI-Thinker / OV2640)
+    extern const char index_ov2640_html[];  // defined in camera_index.h
+    return httpd_resp_sendstr(req, (const char *)index_ov2640_html);
 }
 
 void startCameraServer(){
@@ -625,6 +678,13 @@ void startCameraServer(){
         .handler   = stream_handler,
         .user_ctx  = NULL
     };
+    httpd_uri_t ledpage_uri = {
+    .uri       = "/led",
+    .method    = HTTP_GET,
+    .handler   = led_page_handler,
+    .user_ctx  = NULL
+    };
+
 
 
     ra_filter_init(&ra_filter, 20);
@@ -651,6 +711,7 @@ void startCameraServer(){
         httpd_register_uri_handler(camera_httpd, &cmd_uri);
         httpd_register_uri_handler(camera_httpd, &status_uri);
         httpd_register_uri_handler(camera_httpd, &capture_uri);
+        httpd_register_uri_handler(camera_httpd, &ledpage_uri);  // <- new
     }
 
     config.server_port += 1;
@@ -660,3 +721,5 @@ void startCameraServer(){
         httpd_register_uri_handler(stream_httpd, &stream_uri);
     }
 }
+
+

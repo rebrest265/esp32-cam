@@ -1,3 +1,12 @@
+/*
+ * Orignial from espressif, part of arduino-esp32
+ * 
+ * https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer
+ * 
+ * Simplified and modified by rebrest265 https://github.com/rebrest265/esp32-cam/ for internal purposes and shared as simple way to run ESP32 cam
+ */
+
+
 #include "esp_camera.h"
 #include <WiFi.h>
 
@@ -9,7 +18,7 @@
 
 // Select camera model
 //#define CAMERA_MODEL_WROVER_KIT // Has PSRAM
-//#define CAMERA_MODEL_ESP_EYE // Has PSRAM
+//define CAMERA_MODEL_ESP_EYE // Has PSRAM
 //#define CAMERA_MODEL_M5STACK_PSRAM // Has PSRAM
 //#define CAMERA_MODEL_M5STACK_V2_PSRAM // M5Camera version B Has PSRAM
 //#define CAMERA_MODEL_M5STACK_WIDE // Has PSRAM
@@ -19,8 +28,9 @@
 
 #include "camera_pins.h"
 
-const char* ssid = "";
-const char* password = "";
+const char* ssid = ""; //your wifi ssid
+const char* password = ""; //your wifi pass
+
 
 void startCameraServer();
 
@@ -28,7 +38,10 @@ void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
-
+  #if defined(LED_GPIO_NUM)
+  pinMode(LED_GPIO_NUM, OUTPUT);
+  digitalWrite(LED_GPIO_NUM, LOW); // LED off at boot
+  #endif
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -83,12 +96,15 @@ void setup() {
     s->set_saturation(s, -2); // lower the saturation
   }
   // drop down frame size for higher initial frame rate
-  s->set_framesize(s, FRAMESIZE_QVGA);
+  s->set_framesize(s, FRAMESIZE_VGA);
+  s->set_dcw(s, 0);
+  s->set_gainceiling(s, GAINCEILING_4X);
 
 #if defined(CAMERA_MODEL_M5STACK_WIDE) || defined(CAMERA_MODEL_M5STACK_ESP32CAM)
   s->set_vflip(s, 1);
   s->set_hmirror(s, 1);
 #endif
+
 
   WiFi.begin(ssid, password);
 
@@ -108,6 +124,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  delay(300000);
+
+  delay(5000);
   ESP.restart();
 }

@@ -6,7 +6,7 @@ This project contains example code for the ESP32-CAM module commonly found on Al
 
 ![ESP32-CAM Module](https://github.com/user-attachments/assets/fd8e7177-5787-4752-88bb-a274b01d3d1b)
 
-The code is based on the ESP32 Arduino library (Espressif Systems) examples.
+The code is heavily based on the ESP32 Arduino library (Espressif Systems) examples, but has been reviewed and refactored to be simpler.
 
 > ⚠️ **Important:** Use **esp32 version 1.0.6** — newer versions may be unstable and not work correctly with this module. Mentioned version of libary is also preserved in this repository.
 
@@ -18,8 +18,9 @@ The code is based on the ESP32 Arduino library (Espressif Systems) examples.
 
 ## 🔧 Software Modifications
 
-To improve reliability, a simple workaround has been added:  
-**The ESP32 automatically restarts every 5 minutes**, which helps recover from potential Wi-Fi disconnections.
+- To improve reliability, a simple workaround has been added: The ESP32 automatically restarts every 5 minutes**, which helps recover from potential Wi-Fi disconnections.
+- LED functionality has been added and simplified - it's no longer PWM dimming, just a simple ON/OFF toggle.
+- Default parameters  such as resolution and gain celling have been adjusted to higher higher values.
 
 ---
 
