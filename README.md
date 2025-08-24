@@ -14,11 +14,17 @@ The code is heavily based on the ESP32 Arduino library (Espressif Systems) examp
 
 ![Libary repository](https://github.com/espressif/arduino-esp32)
 
+**To run it, simply add your Wifi SSID and password in the .ino file, upload to code into your ESP32-CAM board, and then access the camera using IP address shown in your router setting or in the Serial monitor.**
+
+Example photo with default settings, taken at night with the Flashlight enabled:
+
+![Frame example](https://github.com/user-attachments/assets/c8c1cbd4-e02f-44b8-814a-d3cfb980bb5d)
+
 ---
 
 ## 🔧 Software Modifications
 
-- To improve reliability, a simple workaround has been added: The ESP32 automatically restarts every 5 minutes**, which helps recover from potential Wi-Fi disconnections.
+- To improve reliability, a simple workaround has been added: The ESP32 automatically restarts every **5 minutes**, which helps recover from potential Wi-Fi disconnections.
 - LED functionality has been added and simplified - it's no longer PWM dimming, just a simple ON/OFF toggle.
 - Default parameters  such as resolution and gain celling have been adjusted to higher higher values.
 
