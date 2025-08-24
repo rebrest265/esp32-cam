@@ -8,9 +8,10 @@ This project contains example code for the ESP32-CAM module commonly found on Al
 
 The code is based on the ESP32 Arduino library (Espressif Systems) examples.
 
-> ⚠️ **Important:** Use **esp32 version 1.0.6** — newer versions may be unstable and not work correctly with this module.
+> ⚠️ **Important:** Use **esp32 version 1.0.6** — newer versions may be unstable and not work correctly with this module. Mentioned version of libary is also preserved in this repository
 
 ![Library Version](https://github.com/user-attachments/assets/52dd8d03-4888-4fc4-98da-c5acba459686)
+![Libary repository](https://github.com/espressif/arduino-esp32)
 
 ---
 
