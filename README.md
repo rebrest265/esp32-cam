@@ -2,19 +2,19 @@
 
 ## 📷 Introduction
 
-This project contains example code for the ESP32-CAM module commonly found on AliExpress:
+This project contains example Arduino code for the ESP32-CAM module commonly found on AliExpress:
 
 ![ESP32-CAM Module](https://github.com/user-attachments/assets/fd8e7177-5787-4752-88bb-a274b01d3d1b)
 
 The code is heavily based on the ESP32 Arduino library (Espressif Systems) examples, but has been reviewed and refactored to be simpler.
 
-> ⚠️ **Important:** Use **esp32 version 1.0.6** — newer versions may be unstable and not work correctly with this module. Mentioned version of libary is also preserved in this repository.
+> ⚠️ **Important:** Use **esp32 version 1.0.6 for Arduino IDE** — newer versions may be unstable and not work correctly with this module. Mentioned version of libary is also preserved in this repository.
 
 ![Library Version](https://github.com/user-attachments/assets/52dd8d03-4888-4fc4-98da-c5acba459686)
 
 ![Libary repository](https://github.com/espressif/arduino-esp32)
 
-**To run it, simply add your Wifi SSID and password in the .ino file, upload to code into your ESP32-CAM board, and then access the camera using IP address shown in your router setting or in the Serial monitor.**
+**To run it, simply add your Wifi SSID and password in the .ino file, upload to code into your ESP32-CAM board with Arduino IDE, and then access the camera using IP address shown in your router setting or in the Serial monitor.**
 
 Example photo with default settings, taken at night with the Flashlight enabled:
 
