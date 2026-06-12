@@ -4,13 +4,13 @@
 
 This project contains example Arduino code for the ESP32-CAM module commonly found on AliExpress:
 
-![ESP32-CAM Module](https://github.com/user-attachments/assets/fd8e7177-5787-4752-88bb-a274b01d3d1b)
+<img width="404" height="423" alt="image" src="https://github.com/user-attachments/assets/028b4bd5-a822-4c55-abcf-b83069e8e265" />
 
 The code is heavily based on the ESP32 Arduino library (Espressif Systems) examples, but has been reviewed and refactored to be simpler.
 
 >  **Important:** Use **esp32 version 1.0.6 for Arduino IDE** — newer versions may be unstable and not work correctly with this module. Mentioned version of library is also preserved in this repository.
 
-![Library Version](https://github.com/user-attachments/assets/52dd8d03-4888-4fc4-98da-c5acba459686)
+<img width="437" height="201" alt="image" src="https://github.com/user-attachments/assets/525289f4-92b1-4771-acbe-27bddb6c2c50" />
 
 [Library repository](https://github.com/espressif/arduino-esp32)
 
@@ -18,7 +18,7 @@ The code is heavily based on the ESP32 Arduino library (Espressif Systems) examp
 
 Example photo with default settings, taken at night with the Flashlight enabled:
 
-![Frame example](https://github.com/user-attachments/assets/c8c1cbd4-e02f-44b8-814a-d3cfb980bb5d)
+<img width="640" height="481" alt="image" src="https://github.com/user-attachments/assets/22d17db7-a90a-4929-9ff7-d18ae4d00c9f" />
 
 ---
 
@@ -34,7 +34,7 @@ Example photo with default settings, taken at night with the Flashlight enabled:
 
 If you're using a motherboard like this:
 
-![Motherboard Image](https://github.com/user-attachments/assets/78268632-2c51-4234-a0d6-db0731de24a8)
+<img width="284" height="222" alt="image" src="https://github.com/user-attachments/assets/f45172e2-2655-4d10-8415-8ca7214cd198" />
 
 It is recommended to **cut the trace for GPIO0 after uploading the firmware**.  
 Otherwise, the board may require pressing the **RST** button every time to boot.
